@@ -1,16 +1,26 @@
 const express = require("express");
 const axios = require("axios");
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-app.use(express.json());
 
+// Middleware
+app.use(express.json());
+app.use(cors()); // разрешаем запросы с других источников
+
+// Корневой маршрут
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
+
+// Маршрут для работы с GPT
 app.post("/gpt", async (req, res) => {
   const userMessage = req.body.message;
 
   try {
     const response = await axios.post("https://api.openai.com/v1/chat/completions", {
-      model: "gpt-4o mini",
+      model: "gpt-4o-mini",  // используем gpt-4o mini
       messages: [{ role: "user", content: userMessage }]
     }, {
       headers: {
@@ -29,3 +39,4 @@ app.post("/gpt", async (req, res) => {
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
