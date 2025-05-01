@@ -1,0 +1,6 @@
+.env
+node_modules/
+.bash_history
+npm-debug.log
+pnpm-debug.log
+.DS_Store
