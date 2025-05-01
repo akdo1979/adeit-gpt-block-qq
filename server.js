@@ -19,7 +19,7 @@ app.post("/gpt", async (req, res) => {
   const userMessage = req.body.message;
 
   try {
-    const response = await axios.post("https://api.openai.com/v1/chat/completions", {
+    const response = await axios.post("https://api.openai.com/gpt/v1/chat/completions", {
       model: "gpt-4o-mini",  // используем gpt-4o mini
       messages: [{ role: "user", content: userMessage }]
     }, {
