@@ -10,7 +10,7 @@ app.post("/gpt", async (req, res) => {
 
   try {
     const response = await axios.post("https://api.openai.com/v1/chat/completions", {
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o mini",
       messages: [{ role: "user", content: userMessage }]
     }, {
       headers: {
@@ -27,5 +27,5 @@ app.post("/gpt", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
