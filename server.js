@@ -19,7 +19,7 @@ app.post("/gpt", async (req, res) => {
   const userMessage = req.body.message;
 
   try {
-    const response = await axios.post("https://api.openai.com/gpt/v1/chat/completions", {
+    const response = await axios.post("https://api.openai.com/v1/chat/completions", {
       model: "gpt-4o-mini",  // используем gpt-4o mini
       messages: [{ role: "user", content: userMessage }]
     }, {
@@ -33,11 +33,12 @@ app.post("/gpt", async (req, res) => {
     res.json({ reply: gptReply });
 
   } catch (error) {
-console.error("GPT error details:", error.response?.data || error.message);
+    console.error("GPT error details:", error.response?.data || error.message);
     res.status(500).json({ error: "GPT error", details: error.message });
   }
 });
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
