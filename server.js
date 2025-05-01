@@ -8,20 +8,22 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Корневой маршрут
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
+// Маршрут для работы с Groq
 app.post("/gpt", async (req, res) => {
   const userMessage = req.body.message;
 
   try {
     const response = await axios.post("https://api.groq.com/openai/v1/chat/completions", {
-      model: "mixtral-8x7b-32768", // или другой groq-модель
+      model: "llama3-70b-8192", // заменили на поддерживаемую модель
       messages: [{ role: "user", content: userMessage }]
     }, {
       headers: {
-        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`, // используем Groq API ключ
         "Content-Type": "application/json"
       }
     });
@@ -37,3 +39,4 @@ app.post("/gpt", async (req, res) => {
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
