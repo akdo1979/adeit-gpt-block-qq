@@ -13,30 +13,31 @@ app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
-// Маршрут для работы с Groq
+// Основной маршрут
 app.post("/gpt", async (req, res) => {
   let userMessage = req.body.message;
 
-  // Определяем язык из метки
+  // 1. Извлечение метки языка
   const languageMatch = userMessage.match(/\[LANGUAGE: (\w+)\]/);
   const language = languageMatch ? languageMatch[1] : null;
 
+  // 2. Удаление метки из текста
+  userMessage = userMessage.replace(/\[LANGUAGE: \w+\]\s*/, '');
+
+  // 3. Выбор инструкции по языку
   let instruction = "";
 
   if (language === 'qq') {
-    instruction = "Qaraqalpaqsha juwap berin.";
+    instruction = "Juwap ber. Til: Qaraqalpaqsha.";
   } else if (language === 'ru') {
-    instruction = "Ответь на русском.";
+    instruction = "Ответь кратко. Язык: русский.";
   } else if (language === 'kz') {
-    instruction = "Qazaqsha juwap ber.";
+    instruction = "Qısqa juwap ber. Til: Qazaqsha.";
   } else if (language === 'en') {
-    instruction = "Answer in English.";
+    instruction = "Answer briefly. Language: English.";
   }
 
-  // Удаляем метку из текста
-  userMessage = userMessage.replace(/\[LANGUAGE: \w+\]\s*/, '');
-
-  // Формируем финальное сообщение
+  // 4. Объединение инструкции и текста
   const fullMessage = `${instruction}\n${userMessage}`;
 
   try {
