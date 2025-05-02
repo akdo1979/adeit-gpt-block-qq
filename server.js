@@ -28,7 +28,7 @@ app.post("/gpt", async (req, res) => {
   let instruction = "";
 
   if (language === 'qq') {
-    instruction = "Juwap ber. Til: Qaraqalpaqsha.";
+    instruction = "Sen her waqıt Qaraqalpaqsha tilinde qisqa, naqty juwap ber. Esh bir tüsindirme, audarma, nemese basqa tilde habar berme.";
   } else if (language === 'ru') {
     instruction = "Ответь кратко. Язык: русский.";
   } else if (language === 'kz') {
