@@ -37,13 +37,14 @@ app.post("/gpt", async (req, res) => {
     instruction = "Answer briefly. Language: English.";
   }
 
-  // 4. Объединение инструкции и текста
-  const fullMessage = `${instruction}\n${userMessage}`;
-
+  // 4. Формирование сообщений: инструкция и сам вопрос
   try {
     const response = await axios.post("https://api.groq.com/openai/v1/chat/completions", {
       model: "llama3-70b-8192",
-      messages: [{ role: "user", content: fullMessage }]
+      messages: [
+        { role: "system", content: instruction }, // инструкция для ИИ
+        { role: "user", content: userMessage }    // сам вопрос от пользователя
+      ]
     }, {
       headers: {
         "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
