@@ -23,7 +23,7 @@ app.post("/gpt", async (req, res) => {
       messages: [{ role: "user", content: userMessage }]
     }, {
       headers: {
-        "Authorization": Bearer ${process.env.GROQ_API_KEY}, // используем Groq API ключ
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
         "Content-Type": "application/json"
       }
     });
