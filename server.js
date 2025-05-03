@@ -12,12 +12,10 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
 });
 
-// Корневой маршрут
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
-// Основной маршрут
 app.post("/gpt", async (req, res) => {
   const userMessage = req.body.message;
 
@@ -32,14 +30,15 @@ app.post("/gpt", async (req, res) => {
       ]
     });
 
-    const gptReply = chatCompletion.choices[0].message.content;
-    res.json({ reply: gptReply });
-
+    const reply = chatCompletion.choices[0]?.message?.content || "Нет ответа.";
+    res.json({ reply });
   } catch (error) {
-    console.error("Groq SDK error:", error.message);
-    res.status(500).json({ error: "Groq SDK error", details: error.message });
+    console.error("Groq API error:", error.response?.data || error.message);
+    res.status(500).json({ error: "Groq API error", details: error.message });
   }
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
