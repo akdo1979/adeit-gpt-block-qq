@@ -19,7 +19,7 @@ app.post("/gpt", async (req, res) => {
 
   try {
     const response = await axios.post("https://api.groq.com/openai/v1/chat/completions", {
-      model: "llama3-70b-8192", // заменили на поддерживаемую модель
+      model: "llama3-70b-8192",
       messages: [{ role: "user", content: userMessage }]
     }, {
       headers: {
@@ -38,5 +38,4 @@ app.post("/gpt", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 10000;
-console.log(`Server running on port ${PORT}`);
-
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
