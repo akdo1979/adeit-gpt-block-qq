@@ -1,42 +1,45 @@
 const express = require("express");
-const axios = require("axios");
 const cors = require("cors");
+const { Groq } = require("groq-sdk");
 require("dotenv").config();
 
 const app = express();
-
-// Middleware
 app.use(express.json());
-app.use(cors()); // разрешаем запросы с других источников
+app.use(cors());
+
+// Инициализация Groq SDK
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY
+});
 
 // Корневой маршрут
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
-// Маршрут для работы с GPT
+// Основной маршрут
 app.post("/gpt", async (req, res) => {
   const userMessage = req.body.message;
 
   try {
-    const response = await axios.post("https://api.openai.com/v1/chat/completions", {
-      model: "gpt-4o-mini",  // используем gpt-4o mini
-      messages: [{ role: "user", content: userMessage }]
-    }, {
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      }
+    const chatCompletion = await groq.chat.completions.create({
+      model: "llama3-70b-8192",
+      messages: [
+        {
+          role: "user",
+          content: userMessage
+        }
+      ]
     });
 
-    const gptReply = response.data.choices[0].message.content;
+    const gptReply = chatCompletion.choices[0].message.content;
     res.json({ reply: gptReply });
 
   } catch (error) {
-    res.status(500).json({ error: "GPT error", details: error.message });
+    console.error("Groq SDK error:", error.message);
+    res.status(500).json({ error: "Groq SDK error", details: error.message });
   }
 });
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
