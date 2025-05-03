@@ -13,41 +13,17 @@ app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
-// Основной маршрут
+// Маршрут для работы с Groq
 app.post("/gpt", async (req, res) => {
-  let userMessage = req.body.message;
+  const userMessage = req.body.message;
 
-  // 1. Извлечение метки языка
-  const languageMatch = userMessage.match(/\[LANGUAGE: (\w+)\]/);
-  const language = languageMatch ? languageMatch[1] : null;
-
-  // 2. Удаление метки из текста
-  userMessage = userMessage.replace(/\[LANGUAGE: \w+\]\s*/, '');
-
-  // 3. Выбор инструкции по языку
-  let instruction = "";
-
-  if (language === 'qq') {
-    instruction = "Sen her waqıt Qaraqalpaqsha tilinde qisqa, naqty juwap ber. Esh bir tüsindirme, audarma, nemese basqa tilde habar berme.";
-  } else if (language === 'ru') {
-    instruction = "Ответь кратко. Язык: русский.";
-  } else if (language === 'kz') {
-    instruction = "Qısqa juwap ber. Til: Qazaqsha.";
-  } else if (language === 'en') {
-    instruction = "Answer briefly. Language: English.";
-  }
-
-  // 4. Формирование сообщений: инструкция и сам вопрос
   try {
     const response = await axios.post("https://api.groq.com/openai/v1/chat/completions", {
-      model: "llama3-70b-8192",
-      messages: [
-        { role: "system", content: instruction }, // инструкция для ИИ
-        { role: "user", content: userMessage }    // сам вопрос от пользователя
-      ]
+      model: "llama3-70b-8192", // заменили на поддерживаемую модель
+      messages: [{ role: "user", content: userMessage }]
     }, {
       headers: {
-        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+        "Authorization": Bearer ${process.env.GROQ_API_KEY}, // используем Groq API ключ
         "Content-Type": "application/json"
       }
     });
@@ -62,4 +38,4 @@ app.post("/gpt", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(Server running on port ${PORT}));
